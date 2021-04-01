@@ -1,5 +1,8 @@
 package lesson_1.lesson4;
 
+import java.util.Random;
+import java.util.Scanner;
+
 public class Main {
 
     public static char[][] map;
@@ -10,10 +13,96 @@ public class Main {
     public static final char DOT_X = 'X';
     public static final char DOT_Y = 'Y';
 
+    public static Scanner sc = new Scanner(System.in);
+    public static Random rand = new Random();
+
 
     public static void main(String[] args) {
         initMap();
         printMap();
+
+        while (true) {
+            humanTurn();
+            printMap();
+
+            if (checkWin0(DOT_X)) {
+                System.out.println("Победил человек");
+            }
+            if (isMapFull()) {
+                System.out.println("Ничья");
+                break;
+            }
+            aiTurn();
+            printMap();
+
+            if (checkWin0(DOT_Y)) {
+                System.out.println("Победил компьютер");
+            }
+            if (isMapFull()) {
+                System.out.println("Ничья");
+                break;
+            }
+        }
+
+        System.out.println("Игра окончена");
+        sc.close();
+    }
+
+    public static boolean isMapFull() {
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map.length; j++) {
+                if (map[i][j] == DOT_EMPTY) {
+                    return false;
+                }
+
+            }
+
+        }
+
+        return true;
+    }
+
+    public static boolean checkWin0(char symb) {
+        if(map[0][0] == symb && map[0][1] == symb && map[0][2] == symb) return true;
+        if(map[1][0] == symb && map[1][1] == symb && map[1][2] == symb) return true;
+        if(map[2][0] == symb && map[2][1] == symb && map[2][2] == symb) return true;
+        if(map[0][0] == symb && map[1][0] == symb && map[2][0] == symb) return true;
+        if(map[0][1] == symb && map[1][1] == symb && map[2][1] == symb) return true;
+        if(map[0][2] == symb && map[1][2] == symb && map[2][2] == symb) return true;
+        if(map[0][0] == symb && map[1][1] == symb && map[2][2] == symb) return true;
+        if(map[2][0] == symb && map[1][1] == symb && map[0][2] == symb) return true;
+        return false;
+    }
+
+    public static void aiTurn() {
+        int x, y;
+        do {
+
+            x = rand.nextInt(SIZE);
+            y = rand.nextInt(SIZE);
+        } while (isNotCellValid(x, y));
+        System.out.println("Компьютер походил в точку " + (x + 1) + " " + (y + 1));
+        map[y][x] = DOT_Y;
+    }
+
+
+
+    public static void humanTurn() {
+        int x, y;
+        do {
+            System.out.println("Введите координаты в формате X Y");
+            x = sc.nextInt() - 1;
+            y = sc.nextInt() - 1;
+        } while (isNotCellValid(x, y));
+
+        map[y][x] = DOT_X;
+    }
+
+    public static boolean isNotCellValid(int x, int y) {
+        if (x < 0 || x >= SIZE || y < 0 || y >= SIZE) return false;
+        if (map [y][x] == DOT_EMPTY) return true;
+
+        return false;
     }
     
     public static void initMap() {
@@ -28,7 +117,7 @@ public class Main {
     }
 
     public static void printMap() {
-        for (int i = 0; i < map.length; i++) {
+        for (int i = 0; i <= map.length; i++) {
             System.out.print(i + " ");
         }
         System.out.println();
