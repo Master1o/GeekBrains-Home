@@ -33,8 +33,7 @@ public class Main {
             for (int j = 0; j < arr[i].length; j++) {
                 try {
                     count = count + Integer.parseInt(arr[i][j]);
-                }
-                catch (NumberFormatException e) {
+                } catch (NumberFormatException e) {
                     throw new MyArrayDataException(i, j);
                 }
             }
